@@ -1,0 +1,19 @@
+python module core
+    interface
+        subroutine fly_in_nasa_aeap1(ntime,sysaxes,whichm,whatf,nene,energy,iyear,idoy,ut,xin1,xin2,xin3,flux) ! in :aep8:subprojects/irbem/source/AE8_AP8.f
+            integer*4 intent(in) :: ntime
+            integer*4 intent(in) :: sysaxes
+            integer*4 intent(in) :: whichm
+            integer*4 intent(in) :: whatf
+            integer*4 intent(in) :: nene
+            real*8 intent(in),dimension(2,25) :: energy
+            integer*4 intent(in),dimension(100000) :: iyear
+            integer*4 intent(in),dimension(100000) :: idoy
+            real*8 intent(in),dimension(100000) :: ut
+            real*8 intent(in),dimension(100000) :: xin1
+            real*8 intent(in),dimension(100000) :: xin2
+            real*8 intent(in),dimension(100000) :: xin3
+            real*8 intent(out),dimension(100000,25) :: flux
+        end subroutine fly_in_nasa_aeap1
+    end interface 
+end python module aep8

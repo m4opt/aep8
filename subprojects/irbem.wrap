@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://github.com/PRBEM/IRBEM.git
+revision = IRBEM-5.0.0b
+patch_directory = irbem

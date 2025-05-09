@@ -1,0 +1,38 @@
+[project]
+name = "aep8"
+description = "Python wrapper for IRBEM AE8/AP8 trapped particle flux model"
+readme = "README.md"
+authors = [ { name = "Leo Singer", email = "leo.p.singer@nasa.gov" } ]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+dependencies = [
+    "numpy>=1.23",
+]
+requires-python = ">=3.10"
+version = "0.0.1"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
+[build-system]
+build-backend = 'mesonpy'
+requires = [
+    "meson>=0.63.0",
+    "meson-python",
+    "setuptools_scm>=6.2",
+    "numpy>=2.0.0"
+]
+
+[tool.cibuildwheel.windows]
+before-build = "pip install delvewheel"
+repair-wheel-command = "delvewheel repair -w {dest_dir} {wheel}"
