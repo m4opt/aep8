@@ -1,6 +1,6 @@
 [project]
 name = "aep8"
-description = "Python wrapper for IRBEM AE8/AP8 trapped particle flux model"
+description = "Calculate the flux of electrons or protons trapped in the Earth's radiation belt using the NASA AE8/AP8 model from IRBEM"
 readme = "README.md"
 license = "BSD-3-Clause"
 authors = [ { name = "Leo Singer", email = "leo.p.singer@nasa.gov" } ]
