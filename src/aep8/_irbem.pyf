@@ -1,4 +1,4 @@
-python module core
+python module _irbem
     interface
         subroutine fly_in_nasa_aeap1(ntime,sysaxes,whichm,whatf,nene,energy,iyear,idoy,ut,xin1,xin2,xin3,flux) ! in :aep8:subprojects/irbem/source/AE8_AP8.f
             integer*4 intent(in) :: ntime

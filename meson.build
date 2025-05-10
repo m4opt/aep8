@@ -19,18 +19,18 @@ incdir_f2py = run_command(
     check: true,
 ).stdout().strip()
 
-core_source = custom_target(
-    'core.c',
-    input: ['src/aep8/core.pyf'],
-    output: ['coremodule.c', 'core-f2pywrappers.f'],
+pyext_source = custom_target(
+    '_irbem.c',
+    input: ['src/aep8/_irbem.pyf'],
+    output: ['_irbemmodule.c', '_irbem-f2pywrappers.f'],
     command: [py, '-m', 'numpy.f2py', '@INPUT@', '--lower'],
 )
 
 py.install_sources('src/aep8/__init__.py', subdir: 'aep8')
 
 py.extension_module(
-    'core',
-    core_source,
+    '_irbem',
+    pyext_source,
     incdir_f2py / 'fortranobject.c',
     dependencies: [py_dep, dependency('numpy'), dependency('irbem')],
     include_directories: incdir_f2py,
