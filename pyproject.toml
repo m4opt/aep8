@@ -13,6 +13,7 @@ classifiers = [
     "Operating System :: Unix",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
     "astropy",
