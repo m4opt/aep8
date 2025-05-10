@@ -1,0 +1,87 @@
+from ._irbem import fly_in_nasa_aeap1
+from typing import Literal
+from astropy.coordinates import EarthLocation
+from astropy.time import Time
+from astropy import units as u
+import numpy as np
+
+
+ntime_max = 100000
+nene_max = 25
+whichm_dict = {("e", "min"): 1, ("e", "max"): 2, ("p", "min"): 3, ("p", "max"): 4}
+whatf_dict = {
+    "differential": 1,
+    "integral": 3,
+}
+
+
+def flux(
+    location: EarthLocation,
+    time: Time,
+    energy: u.Quantity[u.physical.energy],
+    particle: Literal["e", "p"],
+    solar: Literal["min", "max"],
+    kind: Literal["integral", "differential"],
+    out=None,
+):
+    arg_arrays: list[np.ndarray] = [
+        np.empty(ntime_max, dtype=np.int32),
+        np.empty(ntime_max, dtype=np.int32),
+        np.empty(ntime_max),
+        np.empty(ntime_max),
+        np.empty(ntime_max),
+        np.empty(ntime_max),
+    ]
+
+    ene = np.empty((2, nene_max))
+    ene[0, 0] = energy.to_value(u.MeV)
+    x, y, z = u.Quantity(location.geocentric).to_value(u.earthRad)
+    year, yday, seconds = (
+        np.reshape(list(array), time.shape)
+        for array in zip(
+            *(
+                (
+                    datetime.year,
+                    datetime.timetuple().tm_yday,
+                    (
+                        datetime
+                        - datetime.replace(hour=0, minute=0, second=0, microsecond=0)
+                    ).total_seconds(),
+                )
+                for datetime in np.atleast_1d(time.utc.datetime).ravel()
+            )
+        )
+    )
+
+    whichm = whichm_dict[(particle, solar)]
+    whatf = whatf_dict[kind]
+
+    with np.nditer(
+        [year, yday, seconds, x, y, z, out],
+        ["buffered", "external_loop"],
+        [
+            ["readonly"],
+            ["readonly"],
+            ["readonly"],
+            ["readonly"],
+            ["readonly"],
+            ["readonly"],
+            ["writeonly", "allocate"],
+        ],
+        buffersize=ntime_max,
+    ) as it:
+        for *args, out in it:
+            ntime = len(out)
+            for arg_array, arg in zip(arg_arrays, args):
+                arg_array[:ntime] = arg
+            out[:] = fly_in_nasa_aeap1(ntime, 1, whichm, whatf, 1, ene, *arg_arrays)[
+                :ntime, 0
+            ]
+
+        out = it.operands[-1]
+
+    out[out == -1e31] = np.nan
+    out *= u.cm**-2 * u.s**-1
+    if kind == "differential":
+        out *= u.MeV**-1
+    return out
