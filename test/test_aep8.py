@@ -28,7 +28,7 @@ def test_plot_flux(particle, solar, kind):
     ax.set_title(f"{kind} {solar} {particle} flux: {height}, {energy}")
     ax.set_xlabel(f"Longitude ({lon.unit})")
     ax.set_ylabel(f"Longitude ({lon.unit})")
-    plt.colorbar(ax.pcolor(lon.value, lat.value, flux.value)).set_label(
+    plt.colorbar(ax.pcolor(lon.value, lat.value, flux.value, cmap="inferno")).set_label(
         f"Flux ({flux.unit})"
     )
     return fig
