@@ -8,6 +8,11 @@ project(
 
 add_global_arguments('-DNPY_NO_DEPRECATED_API=NPY_1_19_API_VERSION', language: 'c')
 
+is_windows = host_machine.system() == 'windows'
+if is_windows
+    add_project_link_arguments('-lquadmath', language : 'c')
+endif
+
 py = import('python').find_installation(pure: false)
 py_dep = py.dependency()
 
