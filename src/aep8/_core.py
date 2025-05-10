@@ -24,8 +24,33 @@ def flux(
     kind: Literal["integral", "differential"],
     solar: Literal["min", "max"],
     particle: Literal["e", "p"],
-    out=None,
 ) -> u.Quantity:
+    """Calculate the flux in the radiation belt using the NASA AE8/AP8 model.
+
+    Parameters
+    ----------
+    location
+        Location at which to calculate the flux.
+    time
+        Time at which to calculate the flux.
+    energy
+        Energy at which to calculate the flux.
+    kind
+        Kind of flux: ``"integral"`` or ``"differential"``.
+    solar
+        Phase in the solar cycle: ``"min"`` for solar minimum or ``"max"`` for
+        solar maximum.
+    particle
+        Particle species: ``"e"`` for electrons or ``"p"`` for protons.
+
+    Returns
+    -------
+    :
+        Estimated particle flux. If `location` or `time` are arrays, then
+        this will also be an array with the same shape. The units are
+        1 / (s cm2) for integral flux, or 1 / (MeV s cm2) for differential
+        flux.
+    """
     arg_arrays: list[np.ndarray] = [
         np.empty(ntime_max, dtype=np.int32),
         np.empty(ntime_max, dtype=np.int32),
@@ -59,7 +84,7 @@ def flux(
     whatf = whatf_dict[kind]
 
     with np.nditer(
-        [year, yday, seconds, x, y, z, out],
+        [year, yday, seconds, x, y, z, None],
         ["buffered", "external_loop"],
         [
             ["readonly"],
