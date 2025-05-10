@@ -22,6 +22,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 test = [
     "pytest",
+    "pytest-mpl",
 ]
 
 [build-system]
@@ -44,7 +45,7 @@ skip = [
     "*pp*",
 ]
 test-extras = ["test"]
-test-command = "pytest {project}/test"
+test-command = "pytest --mpl {project}/test"
 
 [tool.cibuildwheel.windows]
 before-build = "pip install delvewheel"
