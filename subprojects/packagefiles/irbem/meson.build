@@ -6,7 +6,12 @@ project(
     default_options: ['fortran_std=legacy'],
 )
 
-liberbem = library(
+is_windows = host_machine.system() == 'windows'
+if is_windows
+    add_project_link_arguments('-lquadmath', language : 'c')
+endif
+
+liberbem = static_library(
     'irbem',
     'source/AE8_AP8.f',
     'source/AFRL_CRRES_models.f',
@@ -68,7 +73,7 @@ liberbem = library(
     'source/Tsyganenko89.f',
     'source/Tsyganenko96.f',
     fortran_args: ['-fno-second-underscore', '-ffixed-line-length-none'],
-    install: true
+    pic: true
 )
 
 irbem_dep = declare_dependency(link_with: liberbem)
