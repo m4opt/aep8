@@ -25,7 +25,7 @@ def flux(
     solar: Literal["min", "max"],
     particle: Literal["e", "p"],
     out=None,
-):
+) -> u.Quantity:
     arg_arrays: list[np.ndarray] = [
         np.empty(ntime_max, dtype=np.int32),
         np.empty(ntime_max, dtype=np.int32),
