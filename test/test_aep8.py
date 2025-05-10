@@ -1,10 +1,11 @@
-import aep8
-from astropy import units as u
-from astropy.time import Time
-from astropy.coordinates import EarthLocation
-from matplotlib import pyplot as plt
 import numpy as np
 import pytest
+from astropy import units as u
+from astropy.coordinates import EarthLocation
+from astropy.time import Time
+from matplotlib import pyplot as plt
+
+import aep8
 
 
 def test_version():
