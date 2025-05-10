@@ -2,6 +2,7 @@
 name = "aep8"
 description = "Python wrapper for IRBEM AE8/AP8 trapped particle flux model"
 readme = "README.md"
+license = "BSD-3-Clause"
 authors = [ { name = "Leo Singer", email = "leo.p.singer@nasa.gov" } ]
 classifiers = [
     "Development Status :: 1 - Planning",
