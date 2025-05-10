@@ -26,7 +26,12 @@ pyext_source = custom_target(
     command: [py, '-m', 'numpy.f2py', '@INPUT@', '--lower'],
 )
 
-py.install_sources('src/aep8/__init__.py', subdir: 'aep8')
+py.install_sources(
+    'src/aep8/__init__.py',
+    'src/aep8/_core.py',
+    'src/aep8/py.typed',
+    subdir: 'aep8'
+)
 
 py.extension_module(
     '_irbem',
