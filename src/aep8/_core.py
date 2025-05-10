@@ -20,9 +20,10 @@ def flux(
     location: EarthLocation,
     time: Time,
     energy: u.Quantity[u.physical.energy],
-    particle: Literal["e", "p"],
-    solar: Literal["min", "max"],
+    *,
     kind: Literal["integral", "differential"],
+    solar: Literal["min", "max"],
+    particle: Literal["e", "p"],
     out=None,
 ):
     arg_arrays: list[np.ndarray] = [

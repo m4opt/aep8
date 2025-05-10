@@ -23,7 +23,7 @@ def test_plot_flux(particle, solar, kind):
     location = EarthLocation.from_geodetic(*np.meshgrid(lon, lat), height)
     time = Time("2025-01-01")
     energy = 1 * u.MeV
-    flux = aep8.flux(location, time, energy, particle, solar, kind)
+    flux = aep8.flux(location, time, energy, kind=kind, solar=solar, particle=particle)
     fig, ax = plt.subplots()
     ax.set_title(f"{kind} {solar} {particle} flux: {height}, {energy}")
     ax.set_xlabel(f"Longitude ({lon.unit})")
