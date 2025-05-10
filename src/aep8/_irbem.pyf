@@ -15,5 +15,5 @@ python module _irbem
             real*8 intent(in),dimension(100000) :: xin3
             real*8 intent(out),dimension(100000,25) :: flux
         end subroutine fly_in_nasa_aeap1
-    end interface 
+    end interface
 end python module aep8

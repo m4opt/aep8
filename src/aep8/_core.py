@@ -1,10 +1,11 @@
-from ._irbem import fly_in_nasa_aeap1
 from typing import Literal
+
+import numpy as np
+from astropy import units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
-from astropy import units as u
-import numpy as np
 
+from ._irbem import fly_in_nasa_aeap1
 
 ntime_max = 100000
 nene_max = 25
