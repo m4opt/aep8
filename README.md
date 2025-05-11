@@ -1,5 +1,7 @@
 # AEP8
 
+[![Python Package Index status](https://img.shields.io/pypi/v/aep8)](https://pypi.org/project/aep8/)
+
 ![Map of integral min electron flux at 500 km and 1 MeV](https://github.com/m4opt/aep8/raw/main/test/baseline/test_plot_flux_integral-min-e.png)
 
 This Python package calculates the estimated flux of electrons or protons trapped in the Earth's radiation belt. It is a Python wrapper for the [NASA AE8/AP8 model](https://prbem.github.io/IRBEM/api/radiation_models.html#ae8-and-ap8-models) in the [IRBEM](https://prbem.github.io/IRBEM/) package. It provides an [Astropy](https://www.astropy.org)-friendly interface, allowing you to specify the location using [Astropy coordinates](https://docs.astropy.org/en/stable/coordinates/index.html), the time in [Astropy time](https://docs.astropy.org/en/stable/time/index.html), and the energy using [Astropy units](https://docs.astropy.org/en/stable/units/index.html). You can pass it a single time and location, or arrays of times and locations.
