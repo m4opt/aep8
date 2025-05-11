@@ -1,6 +1,7 @@
 # AEP8
 
 [![Python Package Index status](https://img.shields.io/pypi/v/aep8)](https://pypi.org/project/aep8/)
+[![codecov](https://codecov.io/gh/m4opt/aep8/graph/badge.svg?token=g3n8RKrekt)](https://codecov.io/gh/m4opt/aep8)
 
 ![Map of integral min electron flux at 500 km and 1 MeV](https://github.com/m4opt/aep8/raw/main/test/baseline/test_plot_flux_integral-min-e.png)
 
