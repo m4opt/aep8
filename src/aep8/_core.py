@@ -107,7 +107,7 @@ def flux(
 
         out = it.operands[-1]
 
-    out[out == -1e31] = np.nan
+    out = np.maximum(0, out)
     out *= u.cm**-2 * u.s**-1
     if kind == "differential":
         out *= u.MeV**-1
