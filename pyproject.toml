@@ -69,5 +69,11 @@ select = "*macosx_arm64"
 inherit.environment = "append"
 environment.MACOSX_DEPLOYMENT_TARGET = "14.0"
 
+[tool.coverage.paths]
+source = [
+    "src/aep8",
+    "**/site-packages/aep8",
+]
+
 [tool.mypy]
 ignore_missing_imports = true
