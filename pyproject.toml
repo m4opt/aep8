@@ -28,6 +28,9 @@ test = [
     "pytest-mpl",
 ]
 
+[project.urls]
+GitHub = "https://github.com/m4opt/aep8"
+
 [build-system]
 build-backend = 'mesonpy'
 requires = [
