@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - uses: python/mypy@a8ec8939ce5a8ba332ec428bec8c4b7ef8c42344  # v1.15.0
+      - uses: python/mypy@4934c2b0a6827595514f5957a3d3a71db9de2cc6  # v1.15.0
 
   coverage:
     runs-on: ubuntu-latest
