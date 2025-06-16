@@ -42,11 +42,7 @@ requires = [
 
 [tool.cibuildwheel]
 skip = [
-    # Skip 32-bit platforms.
-    "*win32", "*i686*",
-    # Skip PyPy because it will be disabled by default in cibuildwheel 3.x.
-    # FIXME: Remove when we update to cibuildwheel 3.x.
-    "*pp*",
+    "*win32",
 ]
 test-extras = ["test"]
 test-command = "pytest --mpl {project}/test"
