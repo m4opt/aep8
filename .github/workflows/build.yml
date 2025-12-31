@@ -16,6 +16,7 @@ concurrency:
 jobs:
 
   sdist:
+    permissions: {}
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +38,7 @@ jobs:
           path: dist/*
 
   wheel:
+    permissions: {}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
