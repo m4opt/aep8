@@ -41,9 +41,6 @@ requires = [
 ]
 
 [tool.cibuildwheel]
-skip = [
-    "*win32",
-]
 test-extras = ["test"]
 test-command = "pytest --mpl {project}/test"
 
