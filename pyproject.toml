@@ -24,6 +24,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
+    "hypothesis",
     "pytest",
     "pytest-mpl",
 ]

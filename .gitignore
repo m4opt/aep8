@@ -1,6 +1,7 @@
 __pycache__
 .coverage
 .coverage.*
+.hypothesis
 .vscode
 .wraplock
 /build
