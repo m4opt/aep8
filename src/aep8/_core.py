@@ -127,7 +127,7 @@ def flux(
         with np.nditer(
             [year, yday, seconds, x, y, z] + [None] * nene,
             ["buffered", "external_loop"],
-            [["readonly"]] * 6 + [["writeonly", "allocate"]] * nene,
+            [["readonly"]] * 6 + [["writeonly", "allocate"]] * nene,  # type: ignore[arg-type]
             buffersize=ntime_max,
         ) as it:
             for items in it:
@@ -303,7 +303,7 @@ def flux_from_magnetic_coordinates(
         with np.nditer(
             [L, BBo] + [None] * nene,
             ["buffered", "external_loop"],
-            [["readonly"], ["readonly"]] + [["writeonly", "allocate"]] * nene,
+            [["readonly"], ["readonly"]] + [["writeonly", "allocate"]] * nene,  # type: ignore[arg-type]
             buffersize=ntime_max,
         ) as it:
             for items in it:
