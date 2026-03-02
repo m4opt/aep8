@@ -16,6 +16,21 @@ whatf_dict = {
 }
 
 
+def _prepare_energy(energy):
+    """Convert energy Quantity to (values_array, scalar_flag) tuple.
+
+    Returns
+    -------
+    ene_values : numpy.ndarray
+        1D array of energy values in MeV.
+    scalar : bool
+        True if the input was a scalar Quantity (ndim == 0).
+    """
+    scalar = energy.ndim == 0
+    ene_values = np.atleast_1d(energy.to_value(u.MeV)).ravel()
+    return ene_values, scalar
+
+
 def flux(
     location: EarthLocation,
     time: Time,
@@ -34,7 +49,8 @@ def flux(
     time
         Time at which to calculate the flux.
     energy
-        Energy at which to calculate the flux.
+        Energy at which to calculate the flux. Can be a scalar or an array
+        of energies; arrays are processed in batches of up to 25.
     kind
         Kind of flux: ``"integral"`` or ``"differential"``.
     solar
@@ -47,10 +63,14 @@ def flux(
     -------
     :
         Estimated particle flux. If `location` or `time` are arrays, then
-        this will also be an array with the same shape. The units are
-        1 / (s cm2) for integral flux, or 1 / (MeV s cm2) for differential
-        flux.
+        this will also be an array with the same shape. If `energy` is an
+        array of length *N*, the output gains a trailing dimension of size
+        *N*: ``(*broadcast_shape, N)``. The units are 1 / (s cm2) for
+        integral flux, or 1 / (MeV s cm2) for differential flux.
     """
+    ene_values, scalar_energy = _prepare_energy(energy)
+    n_energies = len(ene_values)
+
     arg_arrays: list[np.ndarray] = [
         np.empty(ntime_max, dtype=np.int32),
         np.empty(ntime_max, dtype=np.int32),
@@ -60,8 +80,6 @@ def flux(
         np.empty(ntime_max),
     ]
 
-    ene = np.empty((2, nene_max))
-    ene[0, 0] = energy.to_value(u.MeV)
     x, y, z = u.Quantity(location.geocentric).to_value(u.earthRad)
     year, yday, seconds = (
         np.reshape(list(array), time.shape)
@@ -83,29 +101,41 @@ def flux(
     whichm = whichm_dict[(particle, solar)]
     whatf = whatf_dict[kind]
 
-    with np.nditer(
-        [year, yday, seconds, x, y, z, None],
-        ["buffered", "external_loop"],
-        [
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["writeonly", "allocate"],
-        ],
-        buffersize=ntime_max,
-    ) as it:
-        for *args, out in it:
-            ntime = len(out)
-            for arg_array, arg in zip(arg_arrays, args):
-                arg_array[:ntime] = arg
-            out[:] = fly_in_nasa_aeap1(ntime, 1, whichm, whatf, 1, ene, *arg_arrays)[
-                :ntime, 0
-            ]
+    all_results = []
 
-        out = it.operands[-1]
+    for ene_start in range(0, n_energies, nene_max):
+        ene_batch = ene_values[ene_start : ene_start + nene_max]
+        nene = len(ene_batch)
+
+        ene = np.empty((2, nene_max))
+        ene[0, :nene] = ene_batch
+
+        with np.nditer(
+            [year, yday, seconds, x, y, z] + [None] * nene,
+            ["buffered", "external_loop"],
+            [["readonly"]] * 6 + [["writeonly", "allocate"]] * nene,  # type: ignore[arg-type]
+            buffersize=ntime_max,
+        ) as it:
+            for items in it:
+                args = items[:6]
+                outs = items[6:]
+                ntime = len(outs[0])
+                for arg_array, arg in zip(arg_arrays, args):
+                    arg_array[:ntime] = arg
+                result = fly_in_nasa_aeap1(
+                    ntime, 1, whichm, whatf, nene, ene, *arg_arrays
+                )
+                for i, out_col in enumerate(outs):
+                    out_col[:] = result[:ntime, i]
+
+            batch_results = [it.operands[6 + i] for i in range(nene)]
+
+        all_results.extend(batch_results)
+
+    if scalar_energy:
+        out = all_results[0]
+    else:
+        out = np.stack(all_results, axis=-1)
 
     out = np.maximum(0, out)
     out *= u.cm**-2 * u.s**-1
