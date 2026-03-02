@@ -204,9 +204,6 @@ def magnetic_coordinates(
     x, y, z = _extract_geocentric(location)
     year, yday, seconds = _extract_time_components(time)
 
-    lm_buf = np.empty(ntime_max)
-    bbo_buf = np.empty(ntime_max)
-
     with np.nditer(
         [year, yday, seconds, x, y, z, None, None],
         ["buffered", "external_loop"],
