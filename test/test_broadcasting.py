@@ -43,7 +43,5 @@ def test_broadcasting_with_energy_array(shapes: BroadcastableShapes):
     )
     time = Time("2020-01-01") + np.random.uniform(0, 1, shapes.input_shapes[1]) * u.year
     energies = [1.0, 5.0, 10.0] * u.MeV
-    result = flux(
-        location, time, energies, kind="integral", solar="max", particle="p"
-    )
+    result = flux(location, time, energies, kind="integral", solar="max", particle="p")
     assert result.shape == (*shapes.result_shape, 3)

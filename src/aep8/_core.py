@@ -118,7 +118,7 @@ def flux(
     all_results = []
 
     for ene_start in range(0, n_energies, nene_max):
-        ene_batch = ene_values[ene_start:ene_start + nene_max]
+        ene_batch = ene_values[ene_start : ene_start + nene_max]
         nene = len(ene_batch)
 
         ene = np.empty((2, nene_max))
@@ -226,9 +226,7 @@ def magnetic_coordinates(
             ntime = len(out_lm)
             for arg_array, arg in zip(arg_arrays, args):
                 arg_array[:ntime] = arg
-            lm_out, bbo_out = compute_lbbo(
-                ntime, 1, kint, *arg_arrays
-            )
+            lm_out, bbo_out = compute_lbbo(ntime, 1, kint, *arg_arrays)
             out_lm[:] = lm_out[:ntime]
             out_bbo[:] = bbo_out[:ntime]
 
@@ -294,7 +292,7 @@ def flux_from_magnetic_coordinates(
     all_results = []
 
     for ene_start in range(0, n_energies, nene_max):
-        ene_batch = ene_values[ene_start:ene_start + nene_max]
+        ene_batch = ene_values[ene_start : ene_start + nene_max]
         nene = len(ene_batch)
 
         ene = np.empty((2, nene_max))
@@ -312,9 +310,7 @@ def flux_from_magnetic_coordinates(
                 n = len(outs[0])
                 l_buf[:n] = l_chunk
                 bbo_buf[:n] = bbo_chunk
-                result = get_ae8_ap8_flux(
-                    n, whichm, whatf, nene, ene, bbo_buf, l_buf
-                )
+                result = get_ae8_ap8_flux(n, whichm, whatf, nene, ene, bbo_buf, l_buf)
                 for i, out_col in enumerate(outs):
                     out_col[:] = result[:n, i]
 
