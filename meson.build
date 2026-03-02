@@ -41,6 +41,7 @@ py.install_sources(
 py.extension_module(
     '_irbem',
     pyext_source,
+    'src/aep8/_compute_lbbo.f',
     incdir_f2py / 'fortranobject.c',
     dependencies: [py_dep, dependency('numpy'), dependency('irbem')],
     include_directories: incdir_f2py,

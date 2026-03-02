@@ -15,5 +15,30 @@ python module _irbem
             real*8 intent(in),dimension(100000) :: xin3
             real*8 intent(out),dimension(100000,25) :: flux
         end subroutine fly_in_nasa_aeap1
+
+        subroutine compute_lbbo(ntime,sysaxes,kint_in,iyear,idoy,ut,xin1,xin2,xin3,lm_out,bbo_out) ! in :aep8:src/aep8/_compute_lbbo.f
+            integer*4 intent(in) :: ntime
+            integer*4 intent(in) :: sysaxes
+            integer*4 intent(in) :: kint_in
+            integer*4 intent(in),dimension(100000) :: iyear
+            integer*4 intent(in),dimension(100000) :: idoy
+            real*8 intent(in),dimension(100000) :: ut
+            real*8 intent(in),dimension(100000) :: xin1
+            real*8 intent(in),dimension(100000) :: xin2
+            real*8 intent(in),dimension(100000) :: xin3
+            real*8 intent(out),dimension(100000) :: lm_out
+            real*8 intent(out),dimension(100000) :: bbo_out
+        end subroutine compute_lbbo
+
+        subroutine get_ae8_ap8_flux(ntmax,whichm,whatf,nene,energy,bbo,l,flux) ! in :aep8:subprojects/irbem/source/AE8_AP8.f
+            integer*4 intent(in) :: ntmax
+            integer*4 intent(in) :: whichm
+            integer*4 intent(in) :: whatf
+            integer*4 intent(in) :: nene
+            real*8 intent(in),dimension(2,25) :: energy
+            real*8 intent(in),dimension(100000) :: bbo
+            real*8 intent(in),dimension(100000) :: l
+            real*8 intent(out),dimension(100000,25) :: flux
+        end subroutine get_ae8_ap8_flux
     end interface
 end python module aep8

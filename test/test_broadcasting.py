@@ -27,3 +27,23 @@ def test_broadcasting(shapes: BroadcastableShapes):
         location, time, 10 * u.MeV, kind="integral", solar="max", particle="p"
     )
     assert result.shape == shapes.result_shape
+
+
+@settings(deadline=None)
+@given(
+    mutually_broadcastable_shapes(num_shapes=2, max_side=20).filter(
+        lambda shapes: np.prod(shapes.result_shape) < 500
+    )
+)
+def test_broadcasting_with_energy_array(shapes: BroadcastableShapes):
+    """Location/time broadcasting still works when energy is an array."""
+    location = EarthLocation.from_geocentric(
+        *np.random.uniform(-10000, 10000, (3, *shapes.input_shapes[0])),
+        unit=u.km,
+    )
+    time = Time("2020-01-01") + np.random.uniform(0, 1, shapes.input_shapes[1]) * u.year
+    energies = [1.0, 5.0, 10.0] * u.MeV
+    result = flux(
+        location, time, energies, kind="integral", solar="max", particle="p"
+    )
+    assert result.shape == (*shapes.result_shape, 3)
