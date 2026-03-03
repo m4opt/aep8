@@ -2,7 +2,7 @@ project(
     'aep8',
     'c',
     'fortran',
-    version: run_command('python', '-m', 'setuptools_scm').stdout().strip(),
+    version: run_command('python', '-m', 'setuptools_scm', check : true).stdout().strip(),
     meson_version: '>=0.64.0',
 )
 
