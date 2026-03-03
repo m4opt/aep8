@@ -35,7 +35,7 @@ GitHub = "https://github.com/m4opt/aep8"
 [build-system]
 build-backend = 'mesonpy'
 requires = [
-    "meson>=0.63.0",
+    "meson>=1.3.0",
     "meson-python",
     "setuptools_scm>=6.2",
     "numpy>=2.0.0"
@@ -70,11 +70,22 @@ select = "*macosx_arm64"
 inherit.environment = "append"
 environment.MACOSX_DEPLOYMENT_TARGET = "14.0"
 
+[[tool.cibuildwheel.overrides]]
+# meson-python: error: The package targets Python's Limited API, which is not
+# supported by free-threaded CPython. The "python.allow_limited_api" Meson
+# build option may be used to override the package default.
+select = "cp???t-*"
+inherit.config-settings = "append"
+config-settings.setup-args = "-Dpython.allow_limited_api=false"
+
 [tool.coverage.paths]
 source = [
     "src/aep8",
     "**/site-packages/aep8",
 ]
+
+[tool.meson-python]
+limited-api = true
 
 [tool.mypy]
 ignore_missing_imports = true

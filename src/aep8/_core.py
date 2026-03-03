@@ -5,14 +5,13 @@ from astropy import units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
 
-from ._irbem import fly_in_nasa_aeap1
+from ._irbem import flux1, flux2, flux3, flux4, geomag3, geomag4
 
-ntime_max = 100000
-nene_max = 25
-whichm_dict = {("e", "min"): 1, ("e", "max"): 2, ("p", "min"): 3, ("p", "max"): 4}
-whatf_dict = {
-    "differential": 1,
-    "integral": 3,
+whichm_dict = {
+    ("e", "min"): (geomag3, flux1),
+    ("e", "max"): (geomag3, flux2),
+    ("p", "min"): (geomag3, flux3),
+    ("p", "max"): (geomag4, flux4),
 }
 
 
@@ -51,64 +50,24 @@ def flux(
         1 / (s cm2) for integral flux, or 1 / (MeV s cm2) for differential
         flux.
     """
-    arg_arrays: list[np.ndarray] = [
-        np.empty(ntime_max, dtype=np.int32),
-        np.empty(ntime_max, dtype=np.int32),
-        np.empty(ntime_max),
-        np.empty(ntime_max),
-        np.empty(ntime_max),
-        np.empty(ntime_max),
-    ]
-
-    ene = np.empty((2, nene_max))
-    ene[0, 0] = energy.to_value(u.MeV)
+    geomag_func, flux_func = whichm_dict[(particle, solar)]
     x, y, z = u.Quantity(location.geocentric).to_value(u.earthRad)
-    year, yday, seconds = (
-        np.reshape(list(array), time.shape)
-        for array in zip(
-            *(
-                (
-                    datetime.year,
-                    datetime.timetuple().tm_yday,
-                    (
-                        datetime
-                        - datetime.replace(hour=0, minute=0, second=0, microsecond=0)
-                    ).total_seconds(),
-                )
-                for datetime in np.atleast_1d(time.utc.datetime).ravel()
-            )
+    t = np.rint(time.utc.unix).astype(int)
+    E = energy.to_value(u.MeV)
+    B, L = geomag_func(t, x, y, z)
+
+    if kind == "integral":
+        F = flux_func(E, L, B) * u.cm**-2 * u.s**-1
+    elif kind == "differential":
+        dE = 0.001
+        F = (
+            (flux_func(E - dE, L, B) - flux_func(E + dE, L, B))
+            / (2 * dE)
+            * u.cm**-2
+            * u.s**-1
+            * u.MeV**-1
         )
-    )
+    else:
+        raise NotImplementedError("This line must not be reached")
 
-    whichm = whichm_dict[(particle, solar)]
-    whatf = whatf_dict[kind]
-
-    with np.nditer(
-        [year, yday, seconds, x, y, z, None],
-        ["buffered", "external_loop"],
-        [
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["readonly"],
-            ["writeonly", "allocate"],
-        ],
-        buffersize=ntime_max,
-    ) as it:
-        for *args, out in it:
-            ntime = len(out)
-            for arg_array, arg in zip(arg_arrays, args):
-                arg_array[:ntime] = arg
-            out[:] = fly_in_nasa_aeap1(ntime, 1, whichm, whatf, 1, ene, *arg_arrays)[
-                :ntime, 0
-            ]
-
-        out = it.operands[-1]
-
-    out = np.maximum(0, out)
-    out *= u.cm**-2 * u.s**-1
-    if kind == "differential":
-        out *= u.MeV**-1
-    return out
+    return F
