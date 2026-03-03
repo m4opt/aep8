@@ -1,15 +1,25 @@
 project(
     'aep8',
     'c',
-    'fortran',
     version: run_command('python', '-m', 'setuptools_scm', check: true).stdout().strip(),
-    meson_version: '>=0.64.0',
+    meson_version: '>=1.3.0',
 )
 
 add_global_arguments(
     '-DNPY_NO_DEPRECATED_API=NPY_1_19_API_VERSION',
     language: 'c',
 )
+
+compiler = meson.get_compiler('c')
+
+if compiler.has_function(
+    'exp10',
+    prefix: ['#define _GNU_SOURCE', '#include <math.h>'],
+)
+    add_global_arguments('-D_GNU_SOURCE', '-DHAVE_EXP10', language: 'c')
+elif compiler.has_function('__exp10', prefix: '#include <math.h>')
+    add_global_arguments('-Dexp10=__exp10', '-DHAVE_EXP10', language: 'c')
+endif
 
 is_windows = host_machine.system() == 'windows'
 if is_windows
@@ -18,22 +28,6 @@ endif
 
 py = import('python').find_installation(pure: false)
 py_dep = py.dependency()
-
-incdir_f2py = run_command(
-    py,
-    [
-        '-c',
-        'import os; os.chdir(".."); import numpy.f2py; print(numpy.f2py.get_include())',
-    ],
-    check: true,
-).stdout().strip()
-
-pyext_source = custom_target(
-    '_irbem.c',
-    input: ['src/aep8/_irbem.pyf'],
-    output: ['_irbemmodule.c', '_irbem-f2pywrappers.f'],
-    command: [py, '-m', 'numpy.f2py', '@INPUT@', '--lower'],
-)
 
 py.install_sources(
     'src/aep8/__init__.py',
@@ -44,10 +38,9 @@ py.install_sources(
 
 py.extension_module(
     '_irbem',
-    pyext_source,
-    incdir_f2py / 'fortranobject.c',
+    'src/aep8/_irbem.c',
     dependencies: [py_dep, dependency('numpy'), dependency('irbem')],
-    include_directories: incdir_f2py,
     install: true,
+    limited_api: '3.11',
     subdir: 'aep8',
 )

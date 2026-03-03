@@ -13,7 +13,7 @@ from aep8 import flux
 
 @settings(deadline=None)
 @given(
-    mutually_broadcastable_shapes(num_shapes=2, max_side=50).filter(
+    mutually_broadcastable_shapes(num_shapes=3, max_side=50).filter(
         lambda shapes: np.prod(shapes.result_shape) < 2000
     )
 )
@@ -23,7 +23,9 @@ def test_broadcasting(shapes: BroadcastableShapes):
         unit=u.km,
     )
     time = Time("2020-01-01") + np.random.uniform(0, 1, shapes.input_shapes[1]) * u.year
-    result = flux(
-        location, time, 10 * u.MeV, kind="integral", solar="max", particle="p"
-    )
+    energy = np.random.uniform(0, 1, shapes.input_shapes[2]) * u.MeV
+    with np.errstate(invalid="ignore"):
+        result = flux(
+            location, time, energy, kind="integral", solar="max", particle="p"
+        )
     assert result.shape == shapes.result_shape
