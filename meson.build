@@ -2,15 +2,18 @@ project(
     'aep8',
     'c',
     'fortran',
-    version: run_command('python', '-m', 'setuptools_scm', check : true).stdout().strip(),
+    version: run_command('python', '-m', 'setuptools_scm', check: true).stdout().strip(),
     meson_version: '>=0.64.0',
 )
 
-add_global_arguments('-DNPY_NO_DEPRECATED_API=NPY_1_19_API_VERSION', language: 'c')
+add_global_arguments(
+    '-DNPY_NO_DEPRECATED_API=NPY_1_19_API_VERSION',
+    language: 'c',
+)
 
 is_windows = host_machine.system() == 'windows'
 if is_windows
-    add_project_link_arguments('-lquadmath', language : 'c')
+    add_project_link_arguments('-lquadmath', language: 'c')
 endif
 
 py = import('python').find_installation(pure: false)
@@ -19,7 +22,8 @@ py_dep = py.dependency()
 incdir_f2py = run_command(
     py,
     [
-        '-c', 'import os; os.chdir(".."); import numpy.f2py; print(numpy.f2py.get_include())',
+        '-c',
+        'import os; os.chdir(".."); import numpy.f2py; print(numpy.f2py.get_include())',
     ],
     check: true,
 ).stdout().strip()
@@ -35,7 +39,7 @@ py.install_sources(
     'src/aep8/__init__.py',
     'src/aep8/_core.py',
     'src/aep8/py.typed',
-    subdir: 'aep8'
+    subdir: 'aep8',
 )
 
 py.extension_module(

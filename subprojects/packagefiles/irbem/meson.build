@@ -8,7 +8,7 @@ project(
 
 is_windows = host_machine.system() == 'windows'
 if is_windows
-    add_project_link_arguments('-lquadmath', language : 'c')
+    add_project_link_arguments('-lquadmath', language: 'c')
 endif
 
 liberbem = static_library(
@@ -73,7 +73,7 @@ liberbem = static_library(
     'source/Tsyganenko89.f',
     'source/Tsyganenko96.f',
     fortran_args: ['-fno-second-underscore', '-ffixed-line-length-none'],
-    pic: true
+    pic: true,
 )
 
 irbem_dep = declare_dependency(link_with: liberbem)

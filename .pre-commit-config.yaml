@@ -42,3 +42,10 @@ repos:
         args: ["--write-changes"]
         additional_dependencies:
           - tomli
+  - repo: https://github.com/trim21/pre-commit-mirror-meson
+    rev: v1.10.1
+    hooks:
+      - id: meson-fmt
+        args: ['--inplace'] # format file in place
+      - id: meson-fmt
+        args: ['--check-only'] # do check only
