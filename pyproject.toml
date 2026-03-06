@@ -23,6 +23,10 @@ requires-python = ">=3.11"
 dynamic = ["version"]
 
 [project.optional-dependencies]
+docs = [
+    "sphinx-astropy[confv2]",
+    "sphinx-automodapi>=0.20.0",
+]
 test = [
     "hypothesis",
     "pytest",

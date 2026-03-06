@@ -1,4 +1,5 @@
 __pycache__
+_build
 .coverage
 .coverage.*
 .hypothesis
@@ -6,4 +7,5 @@ __pycache__
 .wraplock
 /build
 /dist
+/docs/api
 /subprojects/irbem
