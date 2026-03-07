@@ -35,6 +35,7 @@ test = [
 
 [project.urls]
 GitHub = "https://github.com/m4opt/aep8"
+Documentation = "https://aep8.readthedocs.io/"
 
 [build-system]
 build-backend = 'mesonpy'
