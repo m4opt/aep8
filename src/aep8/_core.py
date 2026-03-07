@@ -79,7 +79,7 @@ class Model:
 
         Returns
         -------
-        flux
+        :
             Integrated particle flux up to the given energy.
         """
         L, B = self.geomagnetic_coordinates(location, time)
@@ -104,7 +104,7 @@ class Model:
 
         Returns
         -------
-        flux
+        :
             Integrated particle flux up to the given energy.
         """
         return self._flux(energy.to_value(u.MeV), L, B) * u.cm**-2 * u.s**-1
@@ -128,7 +128,7 @@ class Model:
 
         Returns
         -------
-        flux
+        :
             Differential particle flux.
 
         Notes
@@ -159,7 +159,7 @@ class Model:
 
         Returns
         -------
-        flux
+        :
             Differential particle flux.
 
         Notes
