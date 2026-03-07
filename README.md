@@ -1,6 +1,7 @@
 # AEP8
 
 [![Python Package Index status](https://img.shields.io/pypi/v/aep8)](https://pypi.org/project/aep8/)
+[![Powered by Astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org)
 [![codecov](https://codecov.io/gh/m4opt/aep8/graph/badge.svg?token=g3n8RKrekt)](https://codecov.io/gh/m4opt/aep8)
 [![Documentation](https://readthedocs.org/projects/m4opt/badge/?version=latest)](https://m4opt.readthedocs.io/en/latest/)
 
