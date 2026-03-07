@@ -92,4 +92,5 @@ source = [
 limited-api = true
 
 [tool.mypy]
+exclude = ["^docs/"]
 ignore_missing_imports = true
