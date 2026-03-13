@@ -3,7 +3,7 @@
 [![Python Package Index status](https://img.shields.io/pypi/v/aep8)](https://pypi.org/project/aep8/)
 [![Powered by Astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org)
 [![codecov](https://codecov.io/gh/m4opt/aep8/graph/badge.svg?token=g3n8RKrekt)](https://codecov.io/gh/m4opt/aep8)
-[![Documentation](https://readthedocs.org/projects/m4opt/badge/?version=latest)](https://m4opt.readthedocs.io/en/latest/)
+[![Documentation](https://readthedocs.org/projects/aep8/badge/?version=latest)](https://aep8.readthedocs.io/en/latest/)
 
 ![Map of integral min electron flux at 500 km and 1 MeV](https://github.com/m4opt/aep8/raw/main/test/baseline/test_plot_flux_integral-min-e.png)
 
