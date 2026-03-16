@@ -202,7 +202,7 @@ linkcheck_anchors = False
 
 # -- Options for intersphinx --------------------------------------------------
 intersphinx_mapping.update(  # noqa: F405
-    {'irbem': ('https://prbem.github.io/IRBEM/', None)}
+    {"irbem": ("https://prbem.github.io/IRBEM/", None)}
 )
 
 # -- Merge type annotations with numpydoc parameter docstrings ----------------
