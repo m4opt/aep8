@@ -6,7 +6,8 @@ project(
 )
 
 add_global_arguments(
-    '-DNPY_NO_DEPRECATED_API=NPY_1_19_API_VERSION',
+    '-DNPY_NO_DEPRECATED_API=NPY_2_0_API_VERSION',
+    '-DNPY_TARGET_VERSION=NPY_2_0_API_VERSION',
     language: 'c',
 )
 
