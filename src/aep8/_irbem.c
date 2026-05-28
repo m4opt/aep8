@@ -209,48 +209,53 @@ static PyUFuncGenericFunction flux_loops[] = {flux};
 static const char flux_types[] = {NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE};
 
 
+static int m_exec(PyObject *module) {
+    for (int i = 0; i < sizeof(geomag_ufuncs) / sizeof(geomag_ufuncs[0]); i ++) {
+        geomag_ufuncs[i].data[0] = &geomag_ufuncs[i];
+        if (
+            PyModule_AddObjectRef(
+                module, geomag_ufuncs[i].name,
+                PyUFunc_FromFuncAndData(
+                    geomag_loops, (void *const *) geomag_ufuncs[i].data, geomag_types,
+                    1, 4, 2, PyUFunc_None, geomag_ufuncs[i].name, NULL, 0
+                )
+            )
+        ) {
+            return -1;
+        }
+    }
+    for (int i = 0; i < sizeof(flux_ufuncs) / sizeof(flux_ufuncs[0]); i ++) {
+        flux_ufuncs[i].data[0] = &flux_ufuncs[i];
+        if (
+            PyModule_AddObjectRef(
+                module, flux_ufuncs[i].name,
+                PyUFunc_FromFuncAndData(
+                    flux_loops, (void *const *) flux_ufuncs[i].data, flux_types,
+                    1, 3, 1, PyUFunc_None, flux_ufuncs[i].name, NULL, 0
+                )
+            )
+        ) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+
 static PyModuleDef moduledef = {
     .m_base = PyModuleDef_HEAD_INIT,
-    .m_name = "_irbem"
+    .m_name = "_irbem",
+    .m_slots = (PyModuleDef_Slot []) {
+        {Py_mod_exec, m_exec},
+        {/* terminal element, all NULL */}
+    },
 };
 
 
 PyMODINIT_FUNC
 PyInit__irbem(void)
 {
-    #define ADDOBJECT(key, value) do { \
-        PyObject *object = value; \
-        int result = PyModule_AddObjectRef(module, key, object); \
-        Py_XDECREF(object); \
-        if (result) { \
-            Py_DECREF(module); \
-            return NULL; \
-        } \
-    } while (0)
-
     import_array();
     import_ufunc();
-
-    PyObject *module = PyModule_Create(&moduledef);
-    if (!module) return NULL;
-
-    for (int i = 0; i < sizeof(geomag_ufuncs) / sizeof(geomag_ufuncs[0]); i ++) {
-        geomag_ufuncs[i].data[0] = &geomag_ufuncs[i];
-        ADDOBJECT(
-            geomag_ufuncs[i].name,
-            PyUFunc_FromFuncAndData(
-                geomag_loops, (void *const *) geomag_ufuncs[i].data, geomag_types,
-                1, 4, 2, PyUFunc_None, geomag_ufuncs[i].name, NULL, 0));
-    }
-
-    for (int i = 0; i < sizeof(flux_ufuncs) / sizeof(flux_ufuncs[0]); i ++) {
-        flux_ufuncs[i].data[0] = &flux_ufuncs[i];
-        ADDOBJECT(
-            flux_ufuncs[i].name,
-            PyUFunc_FromFuncAndData(
-                flux_loops, (void *const *) flux_ufuncs[i].data, flux_types,
-                1, 3, 1, PyUFunc_None, flux_ufuncs[i].name, NULL, 0));
-    }
-
-    return module;
+    return PyModuleDef_Init(&moduledef);
 }
