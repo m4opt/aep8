@@ -1,6 +1,6 @@
 #include "irbem.h"
-#include "warnings.h"
 #include <math.h>
+#include <stdalign.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -33,6 +33,9 @@ struct tm *gmtime_r(const time_t *clock, struct tm *result) {
 // timegm is a GPL and BSD extension.
 #define timegm _mkgmtime
 #endif
+
+
+#define ALIGNED_POINTER(tp, expr) ((tp *) __builtin_assume_aligned((expr), alignof(tp)))
 
 
 static void must(const char *message, int result) {
@@ -88,13 +91,10 @@ static void geomag(
     {
         /* Alignment of the ufunc arguments is enforced by the ufunc API. See
          * https://numpy.org/doc/stable/user/basics.ufuncs.html#use-of-internal-buffers. */
-        WARNINGS_PUSH
-        WARNINGS_IGNORE_CAST_ALIGN
-        time_t epoch = *(time_t *) &args[0][i * steps[0]];
-        double    x1 = *(double *) &args[1][i * steps[1]];
-        double    x2 = *(double *) &args[2][i * steps[2]];
-        double    x3 = *(double *) &args[3][i * steps[3]];
-        WARNINGS_POP
+        time_t epoch = *ALIGNED_POINTER(time_t, &args[0][i * steps[0]]);
+        double    x1 = *ALIGNED_POINTER(double, &args[1][i * steps[1]]);
+        double    x2 = *ALIGNED_POINTER(double, &args[2][i * steps[2]]);
+        double    x3 = *ALIGNED_POINTER(double, &args[3][i * steps[3]]);
 
         struct tm tmstruct;
         time_t epoch_start_of_day;
@@ -116,11 +116,8 @@ static void geomag(
         calcul_lstar_opt_(&t_resol, &r_resol, xGEO, &Lm, &Lstar, &Xj, &Blocal, &Bmin);
         if (Lm < 0 && Lm != -1e31) Lm = -Lm;
         BBo = Blocal / (31165.3 / (Lm * Lm * Lm));
-        WARNINGS_PUSH
-        WARNINGS_IGNORE_CAST_ALIGN
-        *(double *) &args[4][i * steps[4]] = BBo;
-        *(double *) &args[5][i * steps[5]] = Lm;
-        WARNINGS_POP
+        *ALIGNED_POINTER(double, &args[4][i * steps[4]]) = BBo;
+        *ALIGNED_POINTER(double, &args[5][i * steps[5]]) = Lm;
     }
 
     must("pthread_unlock", pthread_mutex_unlock(&geomag_lock));
@@ -176,12 +173,9 @@ static void flux(
     {
         /* Alignment of the ufunc arguments is enforced by the ufunc API. See
          * https://numpy.org/doc/stable/user/basics.ufuncs.html#use-of-internal-buffers. */
-        WARNINGS_PUSH
-        WARNINGS_IGNORE_CAST_ALIGN
-        double E = *(double *) &args[0][i * steps[0]];
-        double L = *(double *) &args[1][i * steps[1]];
-        double B = *(double *) &args[2][i * steps[2]];
-        WARNINGS_POP
+        double E = *ALIGNED_POINTER(double, &args[0][i * steps[0]]);
+        double L = *ALIGNED_POINTER(double, &args[1][i * steps[1]]);
+        double B = *ALIGNED_POINTER(double, &args[2][i * steps[2]]);
 
         double F;
         if (E >= flux_ufunc_data->energy_min && E <= flux_ufunc_data->energy_max) {
@@ -195,10 +189,7 @@ static void flux(
             F = NPY_NAN;
         }
 
-        WARNINGS_PUSH
-        WARNINGS_IGNORE_CAST_ALIGN
-        *(double *) &args[3][i * steps[3]] = F;
-        WARNINGS_POP
+        *ALIGNED_POINTER(double, &args[3][i * steps[3]]) = F;
     }
 
     must("pthread_unlock", pthread_mutex_unlock(&flux_lock));
