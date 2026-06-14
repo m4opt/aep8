@@ -33,7 +33,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install package
-        run: pip install .[test] pytest-cov
+        run: pip install . --group test pytest-cov
 
       - name: Run tests
         run: pytest test --mpl --cov=aep8 --cov=test

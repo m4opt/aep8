@@ -22,7 +22,7 @@ dependencies = [
 requires-python = ">=3.11"
 dynamic = ["version"]
 
-[project.optional-dependencies]
+[dependency-groups]
 docs = [
     "sphinx-astropy[confv2]",
     "sphinx-automodapi>=0.20.0",
@@ -50,7 +50,7 @@ requires = [
 skip = [
     "*win32",
 ]
-test-extras = ["test"]
+test-groups = ["test"]
 test-command = "pytest --mpl {project}/test"
 
 [[tool.cibuildwheel.overrides]]
