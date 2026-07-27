@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 #
 # Astropy documentation build configuration file.
@@ -33,7 +32,7 @@ import tomllib
 sys.path.insert(0, os.path.realpath(".."))
 
 try:
-    from sphinx_astropy.conf.v2 import *  # noqa
+    from sphinx_astropy.conf.v2 import *
 except ImportError:
     print(
         "ERROR: the documentation requires the sphinx-astropy package to be installed"
@@ -59,19 +58,19 @@ highlight_language = "python3"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns.append("_templates")  # noqa: F405
+exclude_patterns.append("_templates")
 
 # This is added to the end of RST files - a good place to put substitutions to
 # be used globally.
 # rst_epilog += r"""
-# """  # noqa: F405
+# """
 
 # -- Project information ------------------------------------------------------
 
 # This does not *have* to match the package name, but typically does
 project = project_metadata["name"]
 author = project_metadata["authors"][0]["name"]
-copyright = "{0}, {1}".format(datetime.datetime.now().year, author)
+copyright = f"{datetime.datetime.now().year}, {author}"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -138,7 +137,7 @@ htmlhelp_basename = project + "doc"
 # Prefixes that are ignored for sorting the Python module index
 modindex_common_prefix = [f"{project}."]
 
-html_theme_options.update(  # noqa: F405
+html_theme_options.update(
     {
         "github_url": project_metadata["urls"]["GitHub"],
     }
@@ -201,11 +200,9 @@ linkcheck_anchors = False
 
 
 # -- Options for intersphinx --------------------------------------------------
-intersphinx_mapping.update(  # noqa: F405
-    {"irbem": ("https://prbem.github.io/IRBEM/", None)}
-)
+intersphinx_mapping.update({"irbem": ("https://prbem.github.io/IRBEM/", None)})
 
 # -- Merge type annotations with numpydoc parameter docstrings ----------------
-extensions.remove("numpydoc")  # noqa: F405
-extensions.append("sphinx.ext.napoleon")  # noqa: F405
+extensions.remove("numpydoc")
+extensions.append("sphinx.ext.napoleon")
 autodoc_typehints = "description"
