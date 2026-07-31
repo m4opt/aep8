@@ -184,7 +184,10 @@ static void flux(
                 flux_ufunc_data->table->map,
                 &L, &B, &E, &F,
                 &flux_ufunc_data->whichm);
-            F = exp10(F);
+            /* TRARA1 clamps the log flux at zero, so below the floor of the
+             * table exp10 returns 1 rather than 0. IRBEM's own driver treats a
+             * log flux of zero as no flux at all; do the same. */
+            F = F > 0 ? exp10(F) : 0;
         } else {
             F = NPY_NAN;
         }
