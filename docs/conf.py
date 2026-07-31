@@ -70,7 +70,7 @@ exclude_patterns.append("_templates")
 # This does not *have* to match the package name, but typically does
 project = project_metadata["name"]
 author = project_metadata["authors"][0]["name"]
-copyright = f"{datetime.datetime.now().year}, {author}"
+copyright = f"{datetime.datetime.now(datetime.UTC).year}, {author}"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
