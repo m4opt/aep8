@@ -23,8 +23,8 @@ pip install aep8
 >>> from astropy import units as u
 >>> import aep8
 >>> loc = EarthLocation.from_geodetic(15 * u.deg, -45 * u.deg, 300 * u.km)
->>> time = Time('2025-01-01 18:37:22')
+>>> time = Time("2025-01-01 18:37:22")
 >>> energy = 10 * u.MeV
->>> aep8.model(solar='max', particle='p').integral_flux(loc, time, energy)
+>>> aep8.model(solar="max", particle="p").integral_flux(loc, time, energy)
 <Quantity 3.04495297 1 / (s cm2)>
 ```
