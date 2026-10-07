@@ -15,7 +15,7 @@ compiler = meson.get_compiler('c')
 
 if compiler.has_function(
     'exp10',
-    prefix: ['#define _GNU_SOURCE', '#include <math.h>'],
+    prefix: ['#include <Python.h>', '#define _GNU_SOURCE', '#include <math.h>'],
 )
     add_global_arguments('-D_GNU_SOURCE', '-DHAVE_EXP10', language: 'c')
 elif compiler.has_function('__exp10', prefix: '#include <math.h>')
