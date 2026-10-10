@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - uses: python/mypy@8aabf8435357eaffceca7237f371e293b8168e54  # v2.3.0
+      - uses: python/mypy@935ba8afba7ceacca0651579450c74339f343016  # v2.4.0
 
   coverage:
     runs-on: ubuntu-latest
