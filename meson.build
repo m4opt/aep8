@@ -13,12 +13,13 @@ add_global_arguments(
 
 compiler = meson.get_compiler('c')
 
-if compiler.has_function(
+if compiler.has_header_symbol(
+    'math.h',
     'exp10',
-    prefix: ['#include <Python.h>', '#define _GNU_SOURCE', '#include <math.h>'],
+    prefix: ['#define _GNU_SOURCE'],
 )
     add_global_arguments('-D_GNU_SOURCE', '-DHAVE_EXP10', language: 'c')
-elif compiler.has_function('__exp10', prefix: '#include <math.h>')
+elif compiler.has_header_symbol('math.h', '__exp10')
     add_global_arguments('-Dexp10=__exp10', '-DHAVE_EXP10', language: 'c')
 endif
 
