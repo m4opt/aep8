@@ -60,16 +60,10 @@ inherit.environment = "append"
 environment.FC = "gfortran-14"
 
 [[tool.cibuildwheel.overrides]]
-# macOS x86_64 wheels are built on GitHub on macOS 15; set deployment target accordingly
-select = "*macosx_x86_64"
+# macOS wheels are built on GitHub on macOS 15; set deployment target accordingly
+select = "*macosx*"
 inherit.environment = "append"
 environment.MACOSX_DEPLOYMENT_TARGET = "15.0"
-
-[[tool.cibuildwheel.overrides]]
-# macOS arm64 wheels are built on GitHub on macOS 14; set deployment target accordingly
-select = "*macosx_arm64"
-inherit.environment = "append"
-environment.MACOSX_DEPLOYMENT_TARGET = "14.0"
 
 [[tool.cibuildwheel.overrides]]
 # meson-python: error: The package targets Python's Limited API, which is not
