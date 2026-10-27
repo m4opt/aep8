@@ -39,7 +39,6 @@ repos:
     rev: v2.4.3
     hooks:
       - id: codespell
-        args: ["--write-changes"]
         additional_dependencies:
           - tomli
   - repo: https://github.com/trim21/pre-commit-mirror-meson
