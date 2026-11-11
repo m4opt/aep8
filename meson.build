@@ -3,11 +3,13 @@ project(
     'c',
     version: run_command('python', '-m', 'setuptools_scm', check: true).stdout().strip(),
     meson_version: '>=1.3.0',
+    default_options: ['werror=true', 'warning_level=2'],
 )
 
 add_global_arguments(
     '-DNPY_NO_DEPRECATED_API=NPY_2_0_API_VERSION',
     '-DNPY_TARGET_VERSION=NPY_2_0_API_VERSION',
+    '-Wno-missing-field-initializers',
     language: 'c',
 )
 
@@ -41,7 +43,11 @@ py.install_sources(
 py.extension_module(
     '_irbem',
     'src/aep8/_irbem.c',
-    dependencies: [py_dep, dependency('numpy'), dependency('irbem')],
+    dependencies: [
+        py_dep,
+        dependency('numpy'),
+        dependency('irbem', default_options: ['werror=false']),
+    ],
     install: true,
     limited_api: '3.11',
     subdir: 'aep8',

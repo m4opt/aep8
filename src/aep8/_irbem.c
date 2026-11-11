@@ -65,7 +65,7 @@ static pthread_once_t geomag_lock_inited = PTHREAD_ONCE_INIT;
 static pthread_mutex_t geomag_lock;
 
 
-static void geomag_lock_init() {
+static void geomag_lock_init(void) {
     must("pthread_mutex_init", pthread_mutex_init(&geomag_lock, NULL));
 }
 
@@ -154,7 +154,7 @@ static pthread_once_t flux_lock_inited = PTHREAD_ONCE_INIT;
 static pthread_mutex_t flux_lock;
 
 
-static void flux_lock_init() {
+static void flux_lock_init(void) {
     must("pthread_mutex_init", pthread_mutex_init(&flux_lock, NULL));
 }
 
@@ -207,7 +207,7 @@ static const char flux_types[] = {NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE
 
 
 static int m_exec(PyObject *module) {
-    for (int i = 0; i < sizeof(geomag_ufuncs) / sizeof(geomag_ufuncs[0]); i ++) {
+    for (unsigned int i = 0; i < sizeof(geomag_ufuncs) / sizeof(geomag_ufuncs[0]); i ++) {
         geomag_ufuncs[i].data[0] = &geomag_ufuncs[i];
         if (
             PyModule_AddObjectRef(
@@ -221,7 +221,7 @@ static int m_exec(PyObject *module) {
             return -1;
         }
     }
-    for (int i = 0; i < sizeof(flux_ufuncs) / sizeof(flux_ufuncs[0]); i ++) {
+    for (unsigned int i = 0; i < sizeof(flux_ufuncs) / sizeof(flux_ufuncs[0]); i ++) {
         flux_ufuncs[i].data[0] = &flux_ufuncs[i];
         if (
             PyModule_AddObjectRef(
@@ -243,11 +243,11 @@ static PyModuleDef moduledef = {
     .m_base = PyModuleDef_HEAD_INIT,
     .m_name = "_irbem",
     .m_slots = (PyModuleDef_Slot []) {
-        {Py_mod_exec, m_exec},
+        {Py_mod_exec, (void *)m_exec},
         #if PY_VERSION_HEX >= 0x030D0000
         {Py_mod_gil, Py_MOD_GIL_NOT_USED},
         #endif
-        {/* terminal element, all NULL */}
+        {0}
     },
 };
 
