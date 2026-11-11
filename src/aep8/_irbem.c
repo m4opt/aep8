@@ -244,6 +244,9 @@ static PyModuleDef moduledef = {
     .m_name = "_irbem",
     .m_slots = (PyModuleDef_Slot []) {
         {Py_mod_exec, m_exec},
+        #if PY_VERSION_HEX >= 0x030D0000
+        {Py_mod_gil, Py_MOD_GIL_NOT_USED},
+        #endif
         {/* terminal element, all NULL */}
     },
 };
