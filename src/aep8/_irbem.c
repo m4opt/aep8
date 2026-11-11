@@ -6,7 +6,6 @@
 #include <math.h>
 #include <stdalign.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <pthread.h>
 #include <time.h>
 #include <numpy/arrayobject.h>
