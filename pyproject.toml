@@ -51,7 +51,11 @@ skip = [
     "*win32",
 ]
 test-groups = ["test"]
-test-command = "pytest --mpl {project}/test"
+test-command = [
+    # Check that warning is absent: "RuntimeWarning: The global interpreter lock (GIL) has been enabled to load module..."
+    "python -W error -c \"import aep8._irbem\"",
+    "pytest --mpl {project}/test",
+]
 
 [[tool.cibuildwheel.overrides]]
 # Use Homebrew-provided Fortran compiler in GitHub Actions runner
