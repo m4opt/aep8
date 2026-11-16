@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Literal, TypeAlias
+from typing import Literal
 from warnings import warn
 
 import numpy as np
@@ -10,8 +10,8 @@ from numpy import typing as npt
 
 from ._irbem import flux1, flux2, flux3, flux4, geomag3, geomag4
 
-Particle: TypeAlias = Literal["e", "p"]
-Solar: TypeAlias = Literal["min", "max"]
+type Particle = Literal["e", "p"]
+type Solar = Literal["min", "max"]
 
 
 @dataclass

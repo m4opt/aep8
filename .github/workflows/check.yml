@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - uses: python/mypy@ad02a35e623d105ab7340f75558716bc09f8242e  # v2.4.1
 
@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install package
         run: pip install . --group test pytest-cov
