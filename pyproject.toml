@@ -73,6 +73,13 @@ select = "cp???t-*"
 inherit.config-settings = "append"
 config-settings.setup-args = "-Dpython.allow_limited_api=false"
 
+# abi3audit does not yet support abi3t.
+# FIXME: Remove once https://github.com/pypa/abi3audit/issues/215 is fixed.
+[[tool.cibuildwheel.overrides]]
+select = "cp315t-*"
+audit-command = []
+audit-requires = []
+
 [tool.coverage.paths]
 source = [
     "src/aep8",
