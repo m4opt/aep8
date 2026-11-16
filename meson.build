@@ -48,6 +48,6 @@ py.extension_module(
         dependency('irbem', default_options: ['werror=false']),
     ],
     install: true,
-    limited_api: '3.11',
+    limited_api: py.language_version(),
     subdir: 'aep8',
 )
