@@ -207,6 +207,9 @@ static const char flux_types[] = {NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE
 
 
 static int m_exec(PyObject *module) {
+    import_array1(-1);
+    import_umath1(-1);
+
     for (unsigned int i = 0; i < sizeof(geomag_ufuncs) / sizeof(geomag_ufuncs[0]); i ++) {
         geomag_ufuncs[i].data[0] = &geomag_ufuncs[i];
         if (
@@ -239,6 +242,24 @@ static int m_exec(PyObject *module) {
 }
 
 
+#ifdef Py_TARGET_ABI3T
+PyABIInfo_VAR(abi_info);
+
+
+static PySlot slots[] = {
+    PySlot_STATIC_DATA(Py_mod_abi, &abi_info),
+    PySlot_STATIC_DATA(Py_mod_name, "_irbem"),
+    PySlot_STATIC_DATA(Py_mod_gil, Py_MOD_GIL_NOT_USED),
+    PySlot_FUNC(Py_mod_exec, m_exec),
+    PySlot_END
+};
+
+
+PyMODEXPORT_FUNC
+PyModExport__irbem(void) {
+    return slots;
+}
+#else
 static PyModuleDef moduledef = {
     .m_base = PyModuleDef_HEAD_INIT,
     .m_name = "_irbem",
@@ -255,7 +276,6 @@ static PyModuleDef moduledef = {
 PyMODINIT_FUNC
 PyInit__irbem(void)
 {
-    import_array();
-    import_ufunc();
     return PyModuleDef_Init(&moduledef);
 }
+#endif
